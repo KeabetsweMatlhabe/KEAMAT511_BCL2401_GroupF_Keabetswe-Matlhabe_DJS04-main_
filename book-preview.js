@@ -1,28 +1,31 @@
-export class BookPreview extends HTMLElement {
+// book-preview.js
+import { authors } from './data.js';
+
+class BookPreview extends HTMLElement {
     static get observedAttributes() {
         return ['author', 'id', 'image', 'title'];
-        //customElements.define('book-preview', BookPreview);
     }
+
     constructor() {
-      super();
-      this.attachShadow({ mode: "open" });
+        super();
+        this.attachShadow({ mode: 'open' });
     }
-    isConnectedCallback(){
+
+    connectedCallback() {
         this.render();
     }
-  
+
     attributeChangedCallback(name, oldValue, newValue) {
-      if (oldValue !== newValue){
-       this.render(); 
-      }    
+        if (oldValue !== newValue) {
+            this.render();
+        }
     }
-  
+
     render() {
         const author = this.getAttribute('author');
         const id = this.getAttribute('id');
         const image = this.getAttribute('image');
         const title = this.getAttribute('title');
-
 
         const template = document.createElement('template');
         template.innerHTML = `
@@ -41,13 +44,11 @@ export class BookPreview extends HTMLElement {
                     background: rgba(var(--color-light), 1);
                 }
 
-
                 @media (min-width: 60rem) {
                     .preview {
                         padding: 1rem;
                     }
                 }
-
 
                 .preview_hidden {
                     display: none;
@@ -68,22 +69,19 @@ export class BookPreview extends HTMLElement {
                                 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
                 }
 
-
                 .preview__info {
                     padding: 1rem;
                 }
-
 
                 .preview__title {
                     margin: 0 0 0.5rem;
                     font-weight: bold;
                     display: -webkit-box;
                     -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;  
+                    -webkit-box-orient: vertical;
                     overflow: hidden;
                     color: rgba(var(--color-dark), 0.8);
                 }
-
 
                 .preview__author {
                     color: rgba(var(--color-dark), 0.4);
@@ -93,16 +91,14 @@ export class BookPreview extends HTMLElement {
                 <img class="preview__image" src="${image}" alt="${title}" />
                 <div class="preview__info">
                     <h3 class="preview__title">${title}</h3>
-                    <div class="preview__author"></div>
+                    <div class="preview__author">${authors[author]}</div>
                 </div>
             </button>
         `;
 
-
-        //this.shadowRoot.innerHTML = '';
+        this.shadowRoot.innerHTML = '';
         this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
+}
 
-  }
-  
-  customElements.define("book-preview", BookPreview);
+customElements.define('book-preview', BookPreview);
